@@ -18,7 +18,6 @@ exports.up = function (knex) {
       table.string("name").notNullable().index();
       table.string("short_description").notNullable();
       table.text("description");
-      table.boolean("approved").defaultTo(true);
       table.string("demo_url");
       table.string("repo_url");
       table.string("image_url");
