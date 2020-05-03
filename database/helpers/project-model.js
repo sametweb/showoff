@@ -1,3 +1,10 @@
+/*
+    Endpoints:
+        /projects (GET) -> .find()
+        /projects/:id (GET) -> .findById()
+        /projects/user/:user_id (GET) -> .findByUser()
+*/
+
 const db = require("../db-config");
 
 module.exports = {

@@ -7,7 +7,7 @@ router.get("/", (req, res, next) => {
     .then((projects) => {
       res.status(200).json(projects);
     })
-    .catch((err) => {
+    .catch(() => {
       next("Error fetching projects");
     });
 });
@@ -21,7 +21,7 @@ router.get("/:id", (req, res, next) => {
         ? res.status(200).json(project)
         : next("Project with specified id could not be found");
     })
-    .catch((err) => {
+    .catch(() => {
       next("Error fetching project");
     });
 });
@@ -32,7 +32,7 @@ router.get("/user/:id", (req, res, next) => {
     .then((projects) => {
       res.status(200).json(projects);
     })
-    .catch((err) => {
+    .catch(() => {
       next("Error fetching projects");
     });
 });

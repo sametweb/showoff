@@ -4,7 +4,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 
 const errorHandler = require("./middlewares/error-handler");
-
+const authenticator = require("./middlewares/authenticator");
 const projectRouter = require("./routers/project-router");
 
 server.use(cors());
