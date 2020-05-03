@@ -3,7 +3,9 @@ const router = require("express").Router();
 const Project = require("../../database/helpers/project-model");
 
 router.get("/", (req, res, next) => {
-  Project.find()
+  const { limit, offset } = req.query;
+
+  Project.find(limit, offset)
     .then((projects) => {
       res.status(200).json(projects);
     })
@@ -28,7 +30,9 @@ router.get("/:id", (req, res, next) => {
 
 router.get("/user/:id", (req, res, next) => {
   const { id } = req.params;
-  Project.findByUser(id)
+  const { limit, offset } = req.query;
+
+  Project.findByUser(id, limit, offset)
     .then((projects) => {
       res.status(200).json(projects);
     })

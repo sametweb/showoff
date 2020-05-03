@@ -13,35 +13,15 @@ module.exports = {
   findByUser,
 };
 
-function find() {
-  return db("comment as c")
+function find(limit = 10, offset = 0) {
+  return db("project as p")
+    .join("comment as c", "p.id", "c.project_id")
+    .select("p.*")
+    .groupBy("p.id")
+    .orderBy("p.id", "desc")
     .count("c.id as comment_count")
-    .join("project as p", "p.id", "c.project_id")
-    .select(
-      "p.id",
-      "p.name",
-      "p.description",
-      "p.short_description",
-      "p.demo_url",
-      "p.repo_url",
-      "p.image_url",
-      "p.tech_stack",
-      "p.created_at",
-      "p.updated_at"
-    )
-    .groupBy(
-      "p.id",
-      "p.name",
-      "p.description",
-      "p.short_description",
-      "p.demo_url",
-      "p.repo_url",
-      "p.image_url",
-      "p.tech_stack",
-      "p.created_at",
-      "p.updated_at"
-    )
-    .orderBy("p.id", "desc");
+    .limit(limit)
+    .offset(offset);
 }
 
 function findById(id) {
@@ -57,34 +37,14 @@ function findById(id) {
     });
 }
 
-function findByUser(user_id) {
-  return db("comment as c")
-    .count("c.id as comment_count")
-    .join("project as p", "p.id", "c.project_id")
+function findByUser(user_id, limit = 10, offset = 0) {
+  return db("project as p")
+    .join("comment as c", "p.id", "c.project_id")
     .where("p.user_id", user_id)
-    .select(
-      "p.id",
-      "p.name",
-      "p.description",
-      "p.short_description",
-      "p.demo_url",
-      "p.repo_url",
-      "p.image_url",
-      "p.tech_stack",
-      "p.created_at",
-      "p.updated_at"
-    )
-    .groupBy(
-      "p.id",
-      "p.name",
-      "p.description",
-      "p.short_description",
-      "p.demo_url",
-      "p.repo_url",
-      "p.image_url",
-      "p.tech_stack",
-      "p.created_at",
-      "p.updated_at"
-    )
-    .orderBy("p.id", "desc");
+    .select("p.*")
+    .groupBy("p.id")
+    .orderBy("p.id", "desc")
+    .count("c.id as comment_count")
+    .limit(limit)
+    .offset(offset);
 }
