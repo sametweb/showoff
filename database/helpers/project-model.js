@@ -1,21 +1,15 @@
-/*
-    Endpoints:
-        /projects (GET) -> .find()
-        /projects/:id (GET) -> .findById()
-        /projects/user/:user_id (GET) -> .findByUser()
-*/
-
 const db = require("../db-config");
 
 module.exports = {
   find,
   findById,
   findByUser,
+  add,
 };
 
 function find(limit = 10, offset = 0) {
   return db("project as p")
-    .join("comment as c", "p.id", "c.project_id")
+    .leftJoin("comment as c", "p.id", "c.project_id")
     .select("p.*")
     .groupBy("p.id")
     .orderBy("p.id", "desc")
@@ -39,7 +33,7 @@ function findById(id) {
 
 function findByUser(user_id, limit = 10, offset = 0) {
   return db("project as p")
-    .join("comment as c", "p.id", "c.project_id")
+    .leftJoin("comment as c", "p.id", "c.project_id")
     .where("p.user_id", user_id)
     .select("p.*")
     .groupBy("p.id")
@@ -47,4 +41,12 @@ function findByUser(user_id, limit = 10, offset = 0) {
     .count("c.id as comment_count")
     .limit(limit)
     .offset(offset);
+}
+
+function add(projectData) {
+  return db("project")
+    .insert(projectData, "id")
+    .then(([id]) => {
+      return db("project").where({ id }).first();
+    });
 }

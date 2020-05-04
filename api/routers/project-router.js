@@ -1,3 +1,10 @@
+/*
+    Endpoints:
+        GET /projects
+        GET /projects/:id
+        GET /projects/user/:user_id
+*/
+
 const router = require("express").Router();
 
 const Project = require("../../database/helpers/project-model");
@@ -7,6 +14,7 @@ router.get("/", (req, res, next) => {
 
   Project.find(limit, offset)
     .then((projects) => {
+      console.log(projects);
       res.status(200).json(projects);
     })
     .catch(() => {
