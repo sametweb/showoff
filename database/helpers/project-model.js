@@ -5,6 +5,7 @@ module.exports = {
   findById,
   findByUser,
   add,
+  update,
 };
 
 function find(limit = 10, offset = 0) {
@@ -43,10 +44,19 @@ function findByUser(user_id, limit = 10, offset = 0) {
     .offset(offset);
 }
 
-function add(projectData) {
+function add(newProject) {
   return db("project")
-    .insert(projectData, "id")
+    .insert(newProject, "id")
     .then(([id]) => {
       return db("project").where({ id }).first();
+    });
+}
+
+function update(updatedData, id) {
+  return db("project")
+    .update(updatedData, "id")
+    .where({ id })
+    .then(([project_id]) => {
+      return db("project").where({ id: project_id }).first();
     });
 }

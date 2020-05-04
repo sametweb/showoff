@@ -32,4 +32,26 @@ router.post("/projects", (req, res, next) => {
     });
 });
 
+router.patch("/projects/:id", async (req, res, next) => {
+  const { decodedToken } = req;
+  const { id: user_id, username } = decodedToken;
+  const id = Number(req.params.id);
+  const updatedData = req.body;
+
+  Project.findById(id).then((found) => {
+    // Checking if user owns the post to be updated
+    if (found.user_id === user_id) {
+      Project.update(updatedData, id)
+        .then((updated) => {
+          updated ? res.status(200).json(updated) : next("Update failed");
+        })
+        .catch(() => {
+          next("Error updating the project");
+        });
+    } else {
+      next("You are not authorized");
+    }
+  });
+});
+
 module.exports = router;
