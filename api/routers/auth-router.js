@@ -12,7 +12,7 @@ router.post("/register", (req, res, next) => {
   if (!username || !password || !email) {
     next("Username, email and password is required!");
   } else if (username.length < minLength || password.length < minLength) {
-    next(`Username and password must be at least ${minLength} characters!`);
+    next(`Username and password must be at least ${minLength} characters`);
   } else {
     const rounds = process.env.HASH_ROUNDS || 12;
     const hash = bcrypt.hashSync(password, rounds);
