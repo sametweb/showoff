@@ -6,6 +6,7 @@ module.exports = {
   findByUser,
   add,
   update,
+  remove,
 };
 
 function find(limit = 10, offset = 0) {
@@ -59,4 +60,8 @@ function update(updatedData, id) {
     .then(([project_id]) => {
       return db("project").where({ id: project_id }).first();
     });
+}
+
+function remove(id) {
+  return db("project").del().where({ id });
 }

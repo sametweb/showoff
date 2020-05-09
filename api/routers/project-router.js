@@ -14,7 +14,6 @@ router.get("/", (req, res, next) => {
 
   Project.find(limit, offset)
     .then((projects) => {
-      console.log(projects);
       res.status(200).json(projects);
     })
     .catch(() => {
@@ -29,7 +28,7 @@ router.get("/:id", (req, res, next) => {
     .then((project) => {
       project
         ? res.status(200).json(project)
-        : next("Project with specified id could not be found");
+        : next("Project with specified id could not be found.");
     })
     .catch(() => {
       next("Error fetching project");

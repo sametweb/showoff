@@ -12,7 +12,7 @@ router.post("/register", (req, res, next) => {
   if (!username || !password || !email) {
     next("Username, email and password is required!");
   } else if (username.length < minLength || password.length < minLength) {
-    next(`Username and password must be at least ${minLength} characters`);
+    next(`Username and password must be at least ${minLength} characters.`);
   } else {
     const rounds = process.env.HASH_ROUNDS || 12;
     const hash = bcrypt.hashSync(password, rounds);
@@ -24,7 +24,7 @@ router.post("/register", (req, res, next) => {
         res.status(201).json(addedUser);
       })
       .catch(() => {
-        next("Error registering!");
+        next("Error registering");
       });
   }
 });
@@ -38,11 +38,11 @@ router.post("/login", (req, res, next) => {
         const token = generateToken(user);
         res.status(200).json({ message: `Welcome, ${username}!`, token });
       } else {
-        next("Wrong credentials!");
+        next("Wrong credentials");
       }
     })
     .catch(() => {
-      next("Login failed!");
+      next("User cannot be found!");
     });
 });
 
