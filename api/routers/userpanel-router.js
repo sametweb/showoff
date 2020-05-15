@@ -1,3 +1,11 @@
+/*
+    Endpoints:
+        GET /userpanel/projects
+        POST /userpanel/projects/:id
+        PATCH /userpanel/projects/:id
+        DELETE /userpanel/projects/:id
+*/
+
 const router = require("express").Router();
 
 const Project = require("../../database/helpers/project-model");

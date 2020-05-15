@@ -1,3 +1,9 @@
+/*
+    Endpoints:
+        POST /register
+        POST /login
+*/
+
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
@@ -9,6 +15,7 @@ router.post("/register", (req, res, next) => {
   const newUser = req.body;
   const { username, password, email } = newUser;
   const minLength = 6;
+
   if (!username || !password || !email) {
     next("Username, email and password is required!");
   } else if (username.length < minLength || password.length < minLength) {
@@ -32,6 +39,7 @@ router.post("/register", (req, res, next) => {
 router.post("/login", (req, res, next) => {
   const user = req.body;
   const { username, password } = user;
+
   Auth.findByUsername(username)
     .then((user) => {
       if (bcrypt.compareSync(password, user.password)) {
