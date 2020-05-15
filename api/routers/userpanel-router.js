@@ -1,9 +1,14 @@
 /*
     Endpoints:
         GET /userpanel/projects
-        POST /userpanel/projects/:id
+        POST /userpanel/projects
         PATCH /userpanel/projects/:id
         DELETE /userpanel/projects/:id
+        
+        GET /userpanel/comments
+        POST /userpanel/comments
+        PATCH /userpanel/comments/:id
+        DELETE /userpanel/comments/:id
 */
 
 const router = require("express").Router();
@@ -30,7 +35,6 @@ router.post("/projects", (req, res, next) => {
 
   Project.add(projectData)
     .then((added) => {
-      console.log({ added });
       res.status(200).json(added);
     })
     .catch(() => {
