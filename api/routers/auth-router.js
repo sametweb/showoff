@@ -11,7 +11,7 @@ const generateToken = require("../utils/generateToken");
 const validateEmail = require("../utils/validateEmail");
 const Auth = require("../../database/helpers/auth-model");
 
-router.post("/register", (req, res, next) => {
+router.post("/register", async (req, res, next) => {
   const newUser = req.body;
   const { username, password, email } = newUser;
   const usernameMinLength = 8;
@@ -26,19 +26,23 @@ router.post("/register", (req, res, next) => {
   } else if (!validateEmail(email)) {
     next("E-mail address is not valid.");
   } else {
-    const rounds = process.env.HASH_ROUNDS || 12;
-    const hash = bcrypt.hashSync(password, rounds);
+    const user = await Auth.findByUsername(username);
 
-    newUser.password = hash;
+    if (user) {
+      next("This username is taken.");
+    } else {
+      const rounds = Number(process.env.HASH_ROUNDS) || 12;
+      const hash = bcrypt.hashSync(password, rounds);
 
-    Auth.add(newUser)
-      .then((addedUser) => {
+      newUser.password = hash;
+      try {
+        const addedUser = await Auth.add(newUser);
         delete addedUser.password;
         res.status(201).json(addedUser);
-      })
-      .catch(() => {
+      } catch {
         next("There was an error while registering. Please try again.");
-      });
+      }
+    }
   }
 });
 

@@ -1,3 +1,3 @@
-module.exports = function (err, req, res, next) {
-  res.status(500).json({ errorMessage: err });
+module.exports = function (error, req, res, next) {
+  res.status(500).json({ error });
 };

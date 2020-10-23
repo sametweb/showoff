@@ -17,7 +17,7 @@ router.get("/", (req, res, next) => {
       res.status(200).json(projects);
     })
     .catch(() => {
-      next("Error fetching projects");
+      next("Server error occured while fetching projects.");
     });
 });
 
@@ -28,10 +28,10 @@ router.get("/:id", (req, res, next) => {
     .then((project) => {
       project
         ? res.status(200).json(project)
-        : next("Project with specified id could not be found.");
+        : next("Project with the specified id could not be found.");
     })
     .catch(() => {
-      next("Error fetching project");
+      next("Server error occured while fetching the project.");
     });
 });
 
@@ -44,7 +44,7 @@ router.get("/user/:id", (req, res, next) => {
       res.status(200).json(projects);
     })
     .catch(() => {
-      next("Error fetching projects");
+      next("Server error occured while fetching user's projects.");
     });
 });
 

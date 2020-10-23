@@ -15,31 +15,31 @@ const router = require("express").Router();
 
 const Project = require("../../database/helpers/project-model");
 
-router.get("/projects", (req, res, next) => {
+router.get("/projects", async (req, res, next) => {
   const { decodedToken } = req;
   const { id: user_id } = decodedToken;
 
-  Project.findByUser(user_id)
-    .then((projects) => {
-      res.status(200).json(projects);
-    })
-    .catch(() => {
-      next("Error retrieving user projects");
-    });
+  try {
+    const projects = await Project.findByUser(user_id);
+
+    res.status(200).json(projects);
+  } catch {
+    next("Error retrieving user projects");
+  }
 });
 
-router.post("/projects", (req, res, next) => {
+router.post("/projects", async (req, res, next) => {
   const { decodedToken } = req;
   const { id: user_id } = decodedToken;
   const projectData = { ...req.body, user_id };
 
-  Project.add(projectData)
-    .then((added) => {
-      res.status(200).json(added);
-    })
-    .catch(() => {
-      next("Error adding project to database");
-    });
+  try {
+    const addedProject = await Project.add(projectData);
+
+    res.status(200).json(addedProject);
+  } catch {
+    next("Error adding project to database");
+  }
 });
 
 router.patch("/projects/:id", async (req, res, next) => {
@@ -48,26 +48,23 @@ router.patch("/projects/:id", async (req, res, next) => {
   const id = Number(req.params.id);
   const updatedData = req.body;
 
-  Project.findById(id)
-    .then((found) => {
-      // Checking if user owns the post to be updated
-      if (found.user_id === user_id) {
-        Project.update(updatedData, id)
-          .then((updated) => {
-            updated
-              ? res.status(200).json(updated)
-              : next("Update failed: nothing updated");
-          })
-          .catch(() => {
-            next("Error updating the project");
-          });
+  try {
+    const found = await Project.findById(id);
+
+    if (found.user_id === user_id) {
+      const updated = await Project.update(updatedData, id);
+
+      if (updated) {
+        res.status(200).json(updated);
       } else {
-        next("You are not authorized!");
+        next("Update operation failed.");
       }
-    })
-    .catch(() => {
-      next("Project cannot be found!");
-    });
+    } else {
+      next("You are not authorized to perform this operation!");
+    }
+  } catch {
+    next("The project you are trying to update does not exist.");
+  }
 });
 
 router.delete("/projects/:id", async (req, res, next) => {
