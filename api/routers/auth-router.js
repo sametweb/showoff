@@ -14,6 +14,7 @@ const Auth = require("../../database/helpers/auth-model");
 router.post("/register", async (req, res, next) => {
   const newUser = req.body;
   const { username, password, email } = newUser;
+  newUser.url_slug = username;
   const usernameMinLength = 8;
   const passwordMinLength = 6;
 

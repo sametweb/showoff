@@ -6,6 +6,7 @@ exports.up = function (knex) {
       table.text("password").notNullable();
       table.string("email").notNullable().unique();
       table.string("display_name");
+      table.string("url_slug");
     })
     .createTable("project", (table) => {
       table.increments();

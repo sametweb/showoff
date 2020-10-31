@@ -14,9 +14,16 @@ router.get("/", (req, res, next) => {
 
   Project.find(limit, offset)
     .then((projects) => {
+      projects.forEach((project) => {
+        if (project.display_name) {
+          project.username = project.display_name;
+        }
+        delete project.display_name;
+      });
       res.status(200).json(projects);
     })
-    .catch(() => {
+    .catch((err) => {
+      console.log({ err });
       next("Server error occured while fetching projects.");
     });
 });

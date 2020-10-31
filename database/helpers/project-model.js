@@ -11,9 +11,10 @@ module.exports = {
 
 function find(limit = 10, offset = 0) {
   return db("project as p")
-    .leftJoin("comment as c", "p.id", "c.project_id")
-    .select("p.*")
-    .groupBy("p.id")
+    .join("comment as c", "p.id", "c.project_id")
+    .join("user as u", "p.user_id", "u.id")
+    .select("p.*", "u.username", "u.display_name", "u.url_slug")
+    .groupBy("p.id", "u.username", "u.display_name", "u.url_slug")
     .orderBy("p.id", "desc")
     .count("c.id as comment_count")
     .limit(limit)
